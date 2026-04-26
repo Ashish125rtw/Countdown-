@@ -1,1 +1,427 @@
-hi
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wireless PSI — Countdown</title>
+  <style>
+    [data-theme="dark"] {
+      --bg:#0f0f0f; --surface:#1a1a1a; --surface2:#111; --border:#2a2a2a;
+      --text:#f0f0f0; --muted:#666; --accent:#E24B4A;
+      --accent-bg:#2a0e0e; --accent-bd:#7a2020; --accent-tx:#f87171;
+      --cross:#E24B4A; --today-bg:#2a1a1a; --future:#333; --cal-head:#222;
+    }
+    [data-theme="light"] {
+      --bg:#f5f5f5; --surface:#fff; --surface2:#eee; --border:#e0e0e0;
+      --text:#111; --muted:#888; --accent:#E24B4A;
+      --accent-bg:#fff0f0; --accent-bd:#f8b4b4; --accent-tx:#c0392b;
+      --cross:#E24B4A; --today-bg:#fff0f0; --future:#f9f9f9; --cal-head:#f0f0f0;
+    }
+    [data-theme="midnight"] {
+      --bg:#0a0a1a; --surface:#12122a; --surface2:#0d0d20; --border:#2a2a50;
+      --text:#e8e8ff; --muted:#7070aa; --accent:#7c6ff7;
+      --accent-bg:#1a1535; --accent-bd:#4a3faa; --accent-tx:#a99dff;
+      --cross:#7c6ff7; --today-bg:#1f1a40; --future:#1a1a35; --cal-head:#161630;
+    }
+    [data-theme="forest"] {
+      --bg:#0d1410; --surface:#162018; --surface2:#101a12; --border:#254028;
+      --text:#e0f0e4; --muted:#5a8060; --accent:#3ecf6e;
+      --accent-bg:#0d2a18; --accent-bd:#2a7040; --accent-tx:#6ef0a0;
+      --cross:#3ecf6e; --today-bg:#0d2a18; --future:#141e16; --cal-head:#121c14;
+    }
+    [data-theme="sunset"] {
+      --bg:#1a0e08; --surface:#261510; --surface2:#1c100c; --border:#3d2015;
+      --text:#fff0e8; --muted:#9a6050; --accent:#ff7043;
+      --accent-bg:#2a1008; --accent-bd:#aa3a20; --accent-tx:#ffaa88;
+      --cross:#ff7043; --today-bg:#2a1508; --future:#1e1008; --cal-head:#1a0e08;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; align-items: flex-start;
+      justify-content: center; padding: 2rem 1.5rem;
+      transition: background .3s, color .3s;
+    }
+    .container { width: 100%; max-width: 680px; }
+
+    /* TOP BAR */
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.8rem; flex-wrap: wrap; gap: 10px; }
+    .date-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 16px; min-width: 160px; }
+    .date-pill .day-name { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 2px; }
+    .date-pill .date-full { font-size: 15px; font-weight: 600; }
+    .date-pill .time-live { font-size: 12px; color: var(--muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
+    .theme-wrap { display: flex; align-items: center; gap: 8px; }
+    .theme-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+    .theme-dots  { display: flex; gap: 7px; }
+    .tdot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform .15s, border-color .15s; }
+    .tdot:hover  { transform: scale(1.2); }
+    .tdot.active { border-color: var(--text); transform: scale(1.15); }
+    .tdot[data-t="dark"]     { background: #444; }
+    .tdot[data-t="light"]    { background: #ccc; }
+    .tdot[data-t="midnight"] { background: #7c6ff7; }
+    .tdot[data-t="forest"]   { background: #3ecf6e; }
+    .tdot[data-t="sunset"]   { background: #ff7043; }
+
+    /* HEADER */
+    .header { text-align: center; margin-bottom: 1.8rem; }
+    .header .label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .header h1 { font-size: 30px; font-weight: 800; letter-spacing: -.5px; }
+    .header h1 span { color: var(--accent); }
+    .header .sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+    /* CLOCK */
+    .clock-row { display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin-bottom: 2rem; flex-wrap: wrap; }
+    .clock-unit { text-align: center; }
+    .clock-box { font-size: 40px; font-weight: 700; font-variant-numeric: tabular-nums; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; width: 88px; height: 80px; display: flex; align-items: center; justify-content: center; transition: background .3s; }
+    .clock-lbl { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 7px; }
+    .sep { font-size: 34px; font-weight: 700; color: var(--accent); padding-bottom: 32px; }
+
+    /* PROGRESS */
+    .progress-wrap { margin-bottom: 2rem; }
+    .progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .progress-bg   { height: 7px; background: var(--surface); border-radius: 99px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 99px; transition: width .8s; }
+
+    /* STATS */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 2rem; }
+    .stat-card { background: var(--surface); border-radius: 10px; padding: 16px 10px; text-align: center; transition: background .3s; }
+    .stat-val  { font-size: 24px; font-weight: 700; line-height: 1; margin-bottom: 5px; }
+    .stat-lbl  { font-size: 11px; color: var(--muted); }
+
+    /* MILESTONES */
+    .milestones { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 2rem; }
+    .milestone  { flex: 1; min-width: 90px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+    .m-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 4px; }
+    .m-val { font-size: 13px; font-weight: 600; }
+    .m-val.reached { color: var(--accent); }
+
+    /* ── CALENDAR ───────────────────────────────────────── */
+    .cal-section { margin-bottom: 2rem; }
+    .cal-section-title {
+      font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 12px; display: flex;
+      align-items: center; gap: 8px;
+    }
+    .cal-section-title::after { content:''; flex:1; height:1px; background: var(--border); }
+
+    .cal-month { margin-bottom: 18px; }
+    .cal-month-name {
+      font-size: 13px; font-weight: 700; color: var(--text);
+      margin-bottom: 8px; padding: 6px 10px;
+      background: var(--cal-head); border-radius: 8px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .cal-month-name span { font-size: 11px; font-weight: 400; color: var(--muted); }
+    .cal-grid {
+      display: grid; grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .cal-dow {
+      text-align: center; font-size: 10px; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--muted);
+      padding-bottom: 4px;
+    }
+    .cal-day {
+      aspect-ratio: 1; display: flex; align-items: center;
+      justify-content: center; border-radius: 8px;
+      font-size: 13px; font-weight: 500;
+      position: relative; overflow: hidden;
+      border: 1px solid transparent;
+    }
+    .cal-day.empty { background: transparent; }
+    .cal-day.future {
+      background: var(--future);
+      color: var(--muted);
+    }
+    .cal-day.today {
+      background: var(--today-bg);
+      border-color: var(--accent);
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .cal-day.past {
+      background: var(--surface2);
+      color: var(--muted);
+    }
+    /* The X cross */
+    .cal-day.past::before,
+    .cal-day.past::after {
+      content: '';
+      position: absolute;
+      width: 80%; height: 2px;
+      background: var(--cross);
+      opacity: 0.7;
+      border-radius: 2px;
+      top: 50%; left: 50%;
+      transform-origin: center center;
+    }
+    .cal-day.past::before { transform: translate(-50%, -50%) rotate(45deg); }
+    .cal-day.past::after  { transform: translate(-50%, -50%) rotate(-45deg); }
+    .cal-day.exam-day {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      border-color: var(--accent);
+    }
+    .cal-day.exam-day::before, .cal-day.exam-day::after { display: none; }
+
+    /* BANNER */
+    .banner { display: none; background: var(--accent-bg); border: 1px solid var(--accent-bd); border-radius: 8px; padding: 12px 16px; text-align: center; font-size: 14px; font-weight: 600; color: var(--accent-tx); margin-bottom: 1rem; }
+
+    /* QUOTE */
+    .quote { text-align: center; margin-top: 1.5rem; font-size: 13px; color: var(--muted); font-style: italic; line-height: 1.6; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="topbar">
+    <div class="date-pill">
+      <div class="day-name"  id="dayName">Sunday</div>
+      <div class="date-full" id="dateFull">April 26, 2026</div>
+      <div class="time-live" id="timeLive">12:00:00 AM</div>
+    </div>
+    <div class="theme-wrap">
+      <span class="theme-label">Theme</span>
+      <div class="theme-dots">
+        <div class="tdot" data-t="dark"     title="Dark"></div>
+        <div class="tdot" data-t="light"    title="Light"></div>
+        <div class="tdot" data-t="midnight" title="Midnight"></div>
+        <div class="tdot" data-t="forest"   title="Forest"></div>
+        <div class="tdot" data-t="sunset"   title="Sunset"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="header">
+    <div class="label">Counting down to</div>
+    <h1>Wireless <span>PSI</span></h1>
+    <div class="sub">Sunday, June 7, 2026</div>
+  </div>
+
+  <div class="clock-row">
+    <div class="clock-unit"><div class="clock-box" id="cDays">00</div><div class="clock-lbl">Days</div></div>
+    <div class="sep">:</div>
+    <div class="clock-unit"><div class="clock-box" id="cHrs">00</div><div class="clock-lbl">Hours</div></div>
+    <div class="sep">:</div>
+    <div class="clock-unit"><div class="clock-box" id="cMin">00</div><div class="clock-lbl">Mins</div></div>
+    <div class="sep">:</div>
+    <div class="clock-unit"><div class="clock-box" id="cSec">00</div><div class="clock-lbl">Secs</div></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span>Jan 1, 2026</span>
+      <span id="pPct">0% of prep elapsed</span>
+      <span>June 7, 2026</span>
+    </div>
+    <div class="progress-bg"><div class="progress-fill" id="pBar"></div></div>
+  </div>
+
+  <div class="stats-grid" id="statsGrid"></div>
+
+  <div class="milestones" id="milestonesRow"></div>
+
+  <div class="banner" id="banner"></div>
+
+  <!-- CALENDAR -->
+  <div class="cal-section">
+    <div class="cal-section-title">Cross-off calendar</div>
+    <div id="calContainer"></div>
+  </div>
+
+  <div class="quote" id="quoteEl"></div>
+
+</div>
+<script>
+  const EXAM_DATE  = new Date(2026, 5, 7, 23, 59, 59);
+  const PREP_START = new Date(2026, 0, 1);
+
+  const DAYS_LONG  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const DAYS_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const MONTHS     = ['January','February','March','April','May','June',
+                      'July','August','September','October','November','December'];
+  const QUOTES = [
+    "Every day you study is a day closer to success.",
+    "Small daily improvements lead to stunning results.",
+    "The expert in anything was once a beginner.",
+    "Push yourself — no one else will do it for you.",
+    "Discipline is choosing what you want most over what you want now.",
+    "Hard work beats talent when talent doesn't work hard.",
+    "You didn't come this far to only come this far.",
+    "Focus on progress, not perfection.",
+    "One day or day one — you decide.",
+    "Believe you can and you're halfway there.",
+  ];
+
+  // ── THEME ───────────────────────────────────────────────
+  const saved = localStorage.getItem('psi_theme') || 'dark';
+  applyTheme(saved);
+  document.querySelectorAll('.tdot').forEach(dot => {
+    if (dot.dataset.t === saved) dot.classList.add('active');
+    dot.addEventListener('click', () => {
+      applyTheme(dot.dataset.t);
+      localStorage.setItem('psi_theme', dot.dataset.t);
+      document.querySelectorAll('.tdot').forEach(d => d.classList.remove('active'));
+      dot.classList.add('active');
+    });
+  });
+  function applyTheme(t) { document.documentElement.setAttribute('data-theme', t); }
+
+  // ── HELPERS ─────────────────────────────────────────────
+  function pad(n) { return String(Math.floor(n)).padStart(2,'0'); }
+  function countDayType(from, to, weekend) {
+    let count = 0;
+    const d = new Date(from); d.setHours(0,0,0,0);
+    const t = new Date(to);   t.setHours(0,0,0,0);
+    while (d < t) { const w = d.getDay(); if (weekend?(w===0||w===6):(w>0&&w<6)) count++; d.setDate(d.getDate()+1); }
+    return count;
+  }
+  function statCard(val, lbl) {
+    return `<div class="stat-card"><div class="stat-val">${val}</div><div class="stat-lbl">${lbl}</div></div>`;
+  }
+  function sameDay(a, b) {
+    return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+  }
+
+  // ── CALENDAR ────────────────────────────────────────────
+  function buildCalendar() {
+    const container = document.getElementById('calContainer');
+    container.innerHTML = '';
+    const now     = new Date();
+    const todayY  = now.getFullYear();
+    const todayM  = now.getMonth();
+    const todayD  = now.getDate();
+    const examY   = EXAM_DATE.getFullYear();
+    const examM   = EXAM_DATE.getMonth();
+
+    // Show months from PREP_START month up to exam month
+    const startY = PREP_START.getFullYear();
+    const startM = PREP_START.getMonth();
+
+    for (let y = startY, m = startM; y < examY || (y === examY && m <= examM); ) {
+      const daysInMonth = new Date(y, m + 1, 0).getDate();
+      const firstDow    = new Date(y, m, 1).getDay();
+
+      // Count crossed & total for badge
+      let crossed = 0, total = daysInMonth;
+      for (let d = 1; d <= daysInMonth; d++) {
+        const isExam = (y === examY && m === examM && d === EXAM_DATE.getDate());
+        const isPast = (y < todayY) || (y === todayY && m < todayM) || (y === todayY && m === todayM && d < todayD);
+        if (!isExam && isPast) crossed++;
+      }
+
+      const monthDiv = document.createElement('div');
+      monthDiv.className = 'cal-month';
+
+      const isCurrentMonth = (y === todayY && m === todayM);
+      const badge = isCurrentMonth
+        ? `<span>${crossed} / ${total} crossed</span>`
+        : (y < todayY || (y === todayY && m < todayM))
+          ? `<span>All ${total} crossed ✓</span>`
+          : `<span>${total} days to go</span>`;
+
+      monthDiv.innerHTML = `
+        <div class="cal-month-name">${MONTHS[m]} ${y} ${badge}</div>
+        <div class="cal-grid">
+          ${DAYS_SHORT.map(d => `<div class="cal-dow">${d}</div>`).join('')}
+          ${Array(firstDow).fill('<div class="cal-day empty"></div>').join('')}
+          ${Array.from({length: daysInMonth}, (_,i) => {
+            const d = i + 1;
+            const isExam = (y === examY && m === examM && d === EXAM_DATE.getDate());
+            const isToday = (y === todayY && m === todayM && d === todayD);
+            const isPast  = (y < todayY) || (y === todayY && m < todayM) || (y === todayY && m === todayM && d < todayD);
+            let cls = 'future';
+            if (isExam)      cls = 'exam-day';
+            else if (isToday) cls = 'today';
+            else if (isPast)  cls = 'past';
+            return `<div class="cal-day ${cls}">${isExam ? '🎯' : d}</div>`;
+          }).join('')}
+        </div>`;
+
+      container.appendChild(monthDiv);
+
+      m++;
+      if (m > 11) { m = 0; y++; }
+    }
+  }
+
+  // Quote — daily rotating
+  document.getElementById('quoteEl').textContent =
+    `"${QUOTES[new Date().getDate() % QUOTES.length]}"`;
+
+  // ── TICK ────────────────────────────────────────────────
+  let lastCalDay = -1;
+
+  function tick() {
+    const now = new Date();
+
+    // Date pill
+    document.getElementById('dayName').textContent  = DAYS_LONG[now.getDay()];
+    document.getElementById('dateFull').textContent = `${MONTHS[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+    let h = now.getHours(), mi = now.getMinutes(), s = now.getSeconds();
+    const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+    document.getElementById('timeLive').textContent = `${pad(h)}:${pad(mi)}:${pad(s)} ${ap}`;
+
+    const diff = EXAM_DATE - now;
+    if (diff <= 0) {
+      ['cDays','cHrs','cMin','cSec'].forEach(id => document.getElementById(id).textContent = '00');
+      document.getElementById('pBar').style.width = '100%';
+      document.getElementById('pPct').textContent = '100% — Exam Day!';
+      const b = document.getElementById('banner'); b.style.display = 'block';
+      b.textContent = "🎯 It's exam day! You've prepared hard — go show what you know!";
+      return;
+    }
+
+    const totalSec = Math.floor(diff / 1000);
+    document.getElementById('cSec').textContent  = pad(totalSec % 60);
+    document.getElementById('cMin').textContent  = pad(Math.floor(totalSec/60)%60);
+    document.getElementById('cHrs').textContent  = pad(Math.floor(totalSec/3600)%24);
+    document.getElementById('cDays').textContent = pad(Math.floor(totalSec/86400));
+
+    const pct = Math.min(100, Math.max(0, Math.round((now - PREP_START) / (EXAM_DATE - PREP_START) * 100)));
+    document.getElementById('pBar').style.width = pct + '%';
+    document.getElementById('pPct').textContent = pct + '% of prep elapsed';
+
+    const daysLeft  = Math.ceil(diff / 86400000);
+    const weeksLeft = (daysLeft / 7).toFixed(1);
+    const totalHrs  = Math.floor(diff / 3600000);
+    const wds = countDayType(now, EXAM_DATE, false);
+    const wes = countDayType(now, EXAM_DATE, true);
+    const hpd = daysLeft > 0 ? Math.ceil(480 / daysLeft) : 0;
+
+    document.getElementById('statsGrid').innerHTML =
+      statCard(daysLeft, 'Days left') + statCard(weeksLeft, 'Weeks left') +
+      statCard(totalHrs.toLocaleString(), 'Total hours') +
+      statCard(wds, 'Weekdays left') + statCard(wes, 'Weekends left') +
+      statCard(hpd + 'h', 'Study hrs/day');
+
+    const milestones = [
+      { label: '75% prep done', reached: pct >= 75 },
+      { label: '50% mark',      reached: pct >= 50 },
+      { label: 'Last month',    reached: daysLeft <= 30 },
+      { label: 'Last 2 weeks',  reached: daysLeft <= 14 },
+      { label: 'Last week',     reached: daysLeft <= 7 },
+    ];
+    document.getElementById('milestonesRow').innerHTML = milestones.map(m =>
+      `<div class="milestone"><div class="m-lbl">${m.label}</div>
+       <div class="m-val ${m.reached?'reached':''}">${m.reached?'✓ Reached':'Not yet'}</div></div>`
+    ).join('');
+
+    const banner = document.getElementById('banner');
+    if (daysLeft <= 7) { banner.style.display='block'; banner.textContent=`🔥 Only ${daysLeft} day${daysLeft===1?'':'s'} left — maximum focus mode!`; }
+
+    // Rebuild calendar only when day changes (midnight crossover)
+    if (now.getDate() !== lastCalDay) {
+      lastCalDay = now.getDate();
+      buildCalendar();
+    }
+  }
+
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
