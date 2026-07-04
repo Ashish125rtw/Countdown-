@@ -1,180 +1,256 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Wireless PSI — Countdown</title>
-  <style>
-    [data-theme="dark"] {
-      --bg:#0f0f0f; --surface:#1a1a1a; --surface2:#111; --border:#2a2a2a;
-      --text:#f0f0f0; --muted:#666; --accent:#E24B4A;
-      --accent-bg:#2a0e0e; --accent-bd:#7a2020; --accent-tx:#f87171;
-      --cross:#E24B4A; --today-bg:#2a1a1a; --future:#333; --cal-head:#222;
-    }
-    [data-theme="light"] {
-      --bg:#f5f5f5; --surface:#fff; --surface2:#eee; --border:#e0e0e0;
-      --text:#111; --muted:#888; --accent:#E24B4A;
-      --accent-bg:#fff0f0; --accent-bd:#f8b4b4; --accent-tx:#c0392b;
-      --cross:#E24B4A; --today-bg:#fff0f0; --future:#f9f9f9; --cal-head:#f0f0f0;
-    }
-    [data-theme="midnight"] {
-      --bg:#0a0a1a; --surface:#12122a; --surface2:#0d0d20; --border:#2a2a50;
-      --text:#e8e8ff; --muted:#7070aa; --accent:#7c6ff7;
-      --accent-bg:#1a1535; --accent-bd:#4a3faa; --accent-tx:#a99dff;
-      --cross:#7c6ff7; --today-bg:#1f1a40; --future:#1a1a35; --cal-head:#161630;
-    }
-    [data-theme="forest"] {
-      --bg:#0d1410; --surface:#162018; --surface2:#101a12; --border:#254028;
-      --text:#e0f0e4; --muted:#5a8060; --accent:#3ecf6e;
-      --accent-bg:#0d2a18; --accent-bd:#2a7040; --accent-tx:#6ef0a0;
-      --cross:#3ecf6e; --today-bg:#0d2a18; --future:#141e16; --cal-head:#121c14;
-    }
-    [data-theme="sunset"] {
-      --bg:#1a0e08; --surface:#261510; --surface2:#1c100c; --border:#3d2015;
-      --text:#fff0e8; --muted:#9a6050; --accent:#ff7043;
-      --accent-bg:#2a1008; --accent-bd:#aa3a20; --accent-tx:#ffaa88;
-      --cross:#ff7043; --today-bg:#2a1508; --future:#1e1008; --cal-head:#1a0e08;
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Wireless PSI — Countdown</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  [data-theme="dark"] {
+    --bg:#0f0f0f; --surface:#1a1a1a; --surface2:#111; --border:#2a2a2a;
+    --text:#f0f0f0; --muted:#666; --accent:#E24B4A; --accent2:#ff8a5c;
+    --accent-bg:#2a0e0e; --accent-bd:#7a2020; --accent-tx:#f87171;
+    --cross:#E24B4A; --today-bg:#2a1a1a; --future:#333; --cal-head:#222;
+    --gold:#e8b64a; --shadow: 0 10px 30px -12px rgba(0,0,0,.6);
+  }
+  [data-theme="light"] {
+    --bg:#f6f5f3; --surface:#fff; --surface2:#f0efec; --border:#e6e3dd;
+    --text:#181614; --muted:#8a857c; --accent:#E24B4A; --accent2:#ff8a5c;
+    --accent-bg:#fff0f0; --accent-bd:#f8b4b4; --accent-tx:#c0392b;
+    --cross:#E24B4A; --today-bg:#fff0ee; --future:#fbfaf8; --cal-head:#efece7;
+    --gold:#c9922a; --shadow: 0 10px 30px -14px rgba(30,20,10,.18);
+  }
+  [data-theme="midnight"] {
+    --bg:#0a0a1a; --surface:#12122a; --surface2:#0d0d20; --border:#2a2a50;
+    --text:#e8e8ff; --muted:#7070aa; --accent:#7c6ff7; --accent2:#a99dff;
+    --accent-bg:#1a1535; --accent-bd:#4a3faa; --accent-tx:#a99dff;
+    --cross:#7c6ff7; --today-bg:#1f1a40; --future:#1a1a35; --cal-head:#161630;
+    --gold:#e8b64a; --shadow: 0 10px 30px -12px rgba(0,0,10,.6);
+  }
+  [data-theme="forest"] {
+    --bg:#0d1410; --surface:#162018; --surface2:#101a12; --border:#254028;
+    --text:#e0f0e4; --muted:#5a8060; --accent:#3ecf6e; --accent2:#8ff0b0;
+    --accent-bg:#0d2a18; --accent-bd:#2a7040; --accent-tx:#6ef0a0;
+    --cross:#3ecf6e; --today-bg:#0d2a18; --future:#141e16; --cal-head:#121c14;
+    --gold:#e8b64a; --shadow: 0 10px 30px -12px rgba(0,10,0,.5);
+  }
+  [data-theme="sunset"] {
+    --bg:#1a0e08; --surface:#261510; --surface2:#1c100c; --border:#3d2015;
+    --text:#fff0e8; --muted:#9a6050; --accent:#ff7043; --accent2:#ffb088;
+    --accent-bg:#2a1008; --accent-bd:#aa3a20; --accent-tx:#ffaa88;
+    --cross:#ff7043; --today-bg:#2a1508; --future:#1e1008; --cal-head:#1a0e08;
+    --gold:#e8b64a; --shadow: 0 10px 30px -12px rgba(20,5,0,.5);
+  }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: var(--bg); color: var(--text);
-      min-height: 100vh; display: flex; align-items: flex-start;
-      justify-content: center; padding: 2rem 1.5rem;
-      transition: background .3s, color .3s;
-    }
-    .container { width: 100%; max-width: 680px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; display: flex; align-items: flex-start;
+    justify-content: center; padding: 2rem 1.5rem;
+    transition: background .4s, color .4s;
+    position: relative;
+  }
+  .container { width: 100%; max-width: 680px; animation: riseIn .6s ease; }
+  @keyframes riseIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform:none; } }
 
-    /* TOP BAR */
-    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.8rem; flex-wrap: wrap; gap: 10px; }
-    .date-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 16px; min-width: 160px; }
-    .date-pill .day-name { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 2px; }
-    .date-pill .date-full { font-size: 15px; font-weight: 600; }
-    .date-pill .time-live { font-size: 12px; color: var(--muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
-    .theme-wrap { display: flex; align-items: center; gap: 8px; }
-    .theme-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
-    .theme-dots  { display: flex; gap: 7px; }
-    .tdot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform .15s, border-color .15s; }
-    .tdot:hover  { transform: scale(1.2); }
-    .tdot.active { border-color: var(--text); transform: scale(1.15); }
-    .tdot[data-t="dark"]     { background: #444; }
-    .tdot[data-t="light"]    { background: #ccc; }
-    .tdot[data-t="midnight"] { background: #7c6ff7; }
-    .tdot[data-t="forest"]   { background: #3ecf6e; }
-    .tdot[data-t="sunset"]   { background: #ff7043; }
+  /* TOP BAR */
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.8rem; flex-wrap: wrap; gap: 10px; }
+  .date-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 10px 16px; min-width: 160px; box-shadow: var(--shadow); }
+  .date-pill .day-name { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 2px; }
+  .date-pill .date-full { font-size: 15px; font-weight: 600; }
+  .date-pill .time-live { font-size: 12px; color: var(--muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .theme-wrap { display: flex; align-items: center; gap: 8px; }
+  .theme-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  .theme-dots  { display: flex; gap: 7px; }
+  .tdot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform .15s, border-color .15s; }
+  .tdot:hover  { transform: scale(1.2); }
+  .tdot.active { border-color: var(--text); transform: scale(1.15); }
+  .tdot[data-t="dark"]     { background: #444; }
+  .tdot[data-t="light"]    { background: #ccc; }
+  .tdot[data-t="midnight"] { background: #7c6ff7; }
+  .tdot[data-t="forest"]   { background: #3ecf6e; }
+  .tdot[data-t="sunset"]   { background: #ff7043; }
 
-    /* HEADER */
-    .header { text-align: center; margin-bottom: 1.8rem; }
-    .header .label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-    .header h1 { font-size: 30px; font-weight: 800; letter-spacing: -.5px; }
-    .header h1 span { color: var(--accent); }
-    .header .sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  /* HEADER */
+  .header { text-align: center; margin-bottom: 1.8rem; }
+  .header .label { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .header h1 { font-family:'Sora',sans-serif; font-size: 32px; font-weight: 800; letter-spacing: -.5px; }
+  .header h1 span { background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .header .sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
 
-    /* CLOCK */
-    .clock-row { display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin-bottom: 2rem; flex-wrap: wrap; }
-    .clock-unit { text-align: center; }
-    .clock-box { font-size: 40px; font-weight: 700; font-variant-numeric: tabular-nums; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; width: 88px; height: 80px; display: flex; align-items: center; justify-content: center; transition: background .3s; }
-    .clock-lbl { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 7px; }
-    .sep { font-size: 34px; font-weight: 700; color: var(--accent); padding-bottom: 32px; }
+  /* CLOCK */
+  .clock-row { display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin-bottom: 1.6rem; flex-wrap: wrap; }
+  .clock-unit { text-align: center; }
+  .clock-box {
+    font-family:'Sora',sans-serif; font-size: 40px; font-weight: 700; font-variant-numeric: tabular-nums;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    width: 88px; height: 80px; display: flex; align-items: center; justify-content: center;
+    transition: background .3s; box-shadow: var(--shadow); position: relative; overflow: hidden;
+  }
+  .clock-box.flip { animation: flip .4s ease; }
+  @keyframes flip { 0%{ transform: rotateX(0deg); opacity:1;} 45%{ transform: rotateX(90deg); opacity:.4;} 55%{ transform: rotateX(90deg); opacity:.4;} 100%{ transform: rotateX(0deg); opacity:1;} }
+  .clock-lbl { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 7px; }
+  .sep { font-size: 34px; font-weight: 700; color: var(--accent); padding-bottom: 32px; }
 
-    /* PROGRESS */
-    .progress-wrap { margin-bottom: 2rem; }
-    .progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-    .progress-bg   { height: 7px; background: var(--surface); border-radius: 99px; overflow: hidden; }
-    .progress-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 99px; transition: width .8s; }
+  /* PROGRESS */
+  .progress-wrap { margin-bottom: 1.8rem; }
+  .progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  .progress-bg   { height: 8px; background: var(--surface); border-radius: 99px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,.2); }
+  .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 99px; transition: width .8s; }
 
-    /* STATS */
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 2rem; }
-    .stat-card { background: var(--surface); border-radius: 10px; padding: 16px 10px; text-align: center; transition: background .3s; }
-    .stat-val  { font-size: 24px; font-weight: 700; line-height: 1; margin-bottom: 5px; }
-    .stat-lbl  { font-size: 11px; color: var(--muted); }
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 1.8rem; }
+  .stat-card { background: var(--surface); border-radius: 12px; padding: 16px 10px; text-align: center; transition: transform .2s, background .3s; box-shadow: var(--shadow); }
+  .stat-card:hover { transform: translateY(-3px); }
+  .stat-val  { font-family:'Sora',sans-serif; font-size: 24px; font-weight: 700; line-height: 1; margin-bottom: 5px; }
+  .stat-lbl  { font-size: 11px; color: var(--muted); }
 
-    /* MILESTONES */
-    .milestones { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 2rem; }
-    .milestone  { flex: 1; min-width: 90px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
-    .m-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 4px; }
-    .m-val { font-size: 13px; font-weight: 600; }
-    .m-val.reached { color: var(--accent); }
+  /* MILESTONES */
+  .milestones { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.8rem; }
+  .milestone  { flex: 1; min-width: 90px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; transition: border-color .3s; }
+  .m-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 4px; }
+  .m-val { font-size: 13px; font-weight: 600; }
+  .m-val.reached { color: var(--accent); }
+  .milestone.done { border-color: var(--accent); }
 
-    /* ── CALENDAR ───────────────────────────────────────── */
-    .cal-section { margin-bottom: 2rem; }
-    .cal-section-title {
-      font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
-      color: var(--muted); margin-bottom: 12px; display: flex;
-      align-items: center; gap: 8px;
-    }
-    .cal-section-title::after { content:''; flex:1; height:1px; background: var(--border); }
+  /* STREAK */
+  .streak-card {
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    background: var(--surface); border:1px solid var(--border); border-radius: 14px;
+    padding: 14px 18px; margin-bottom: 1.8rem; box-shadow: var(--shadow);
+  }
+  .streak-info .streak-num { font-family:'Sora',sans-serif; font-size:22px; font-weight:800; color: var(--accent); }
+  .streak-info .streak-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing:.06em; }
+  .streak-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2)); color:#fff; border:none;
+    padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight:700; cursor:pointer;
+    transition: transform .15s, opacity .2s; font-family:'Manrope',sans-serif;
+  }
+  .streak-btn:hover { transform: translateY(-2px); }
+  .streak-btn:disabled { opacity: .5; cursor: default; transform:none; background: var(--surface2); color: var(--muted); }
 
-    .cal-month { margin-bottom: 18px; }
-    .cal-month-name {
-      font-size: 13px; font-weight: 700; color: var(--text);
-      margin-bottom: 8px; padding: 6px 10px;
-      background: var(--cal-head); border-radius: 8px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .cal-month-name span { font-size: 11px; font-weight: 400; color: var(--muted); }
-    .cal-grid {
-      display: grid; grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
-    }
-    .cal-dow {
-      text-align: center; font-size: 10px; letter-spacing: .06em;
-      text-transform: uppercase; color: var(--muted);
-      padding-bottom: 4px;
-    }
-    .cal-day {
-      aspect-ratio: 1; display: flex; align-items: center;
-      justify-content: center; border-radius: 8px;
-      font-size: 13px; font-weight: 500;
-      position: relative; overflow: hidden;
-      border: 1px solid transparent;
-    }
-    .cal-day.empty { background: transparent; }
-    .cal-day.future {
-      background: var(--future);
-      color: var(--muted);
-    }
-    .cal-day.today {
-      background: var(--today-bg);
-      border-color: var(--accent);
-      color: var(--accent);
-      font-weight: 700;
-    }
-    .cal-day.past {
-      background: var(--surface2);
-      color: var(--muted);
-    }
-    /* The X cross */
-    .cal-day.past::before,
-    .cal-day.past::after {
-      content: '';
-      position: absolute;
-      width: 80%; height: 2px;
-      background: var(--cross);
-      opacity: 0.7;
-      border-radius: 2px;
-      top: 50%; left: 50%;
-      transform-origin: center center;
-    }
-    .cal-day.past::before { transform: translate(-50%, -50%) rotate(45deg); }
-    .cal-day.past::after  { transform: translate(-50%, -50%) rotate(-45deg); }
-    .cal-day.exam-day {
-      background: var(--accent);
-      color: #fff;
-      font-weight: 800;
-      border-color: var(--accent);
-    }
-    .cal-day.exam-day::before, .cal-day.exam-day::after { display: none; }
+  /* ── CALENDAR ───────────────────────────────────────── */
+  .cal-section { margin-bottom: 1.8rem; }
+  .cal-section-title {
+    font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 12px; display: flex;
+    align-items: center; gap: 8px;
+  }
+  .cal-section-title::after { content:''; flex:1; height:1px; background: var(--border); }
+  .cal-toggle { font-size: 11px; color: var(--accent); cursor: pointer; text-transform: none; letter-spacing: 0; font-weight: 600; }
 
-    /* BANNER */
-    .banner { display: none; background: var(--accent-bg); border: 1px solid var(--accent-bd); border-radius: 8px; padding: 12px 16px; text-align: center; font-size: 14px; font-weight: 600; color: var(--accent-tx); margin-bottom: 1rem; }
+  .cal-month { margin-bottom: 18px; }
+  .cal-month.hidden-month { display: none; }
+  .cal-month-name {
+    font-size: 13px; font-weight: 700; color: var(--text);
+    margin-bottom: 8px; padding: 6px 10px;
+    background: var(--cal-head); border-radius: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .cal-month-name span { font-size: 11px; font-weight: 400; color: var(--muted); }
+  .cal-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  .cal-dow {
+    text-align: center; font-size: 10px; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--muted);
+    padding-bottom: 4px;
+  }
+  .cal-day {
+    aspect-ratio: 1; display: flex; align-items: center;
+    justify-content: center; border-radius: 8px;
+    font-size: 13px; font-weight: 500;
+    position: relative; overflow: hidden;
+    border: 1px solid transparent;
+  }
+  .cal-day.empty { background: transparent; }
+  .cal-day.future { background: var(--future); color: var(--muted); }
+  .cal-day.weekend.future { background: var(--surface2); }
+  .cal-day.today {
+    background: var(--today-bg); border-color: var(--accent); color: var(--accent);
+    font-weight: 700; box-shadow: 0 0 0 3px var(--accent-bg);
+  }
+  .cal-day.past { background: var(--surface2); color: var(--muted); }
+  .cal-day.past::before, .cal-day.past::after {
+    content: ''; position: absolute; width: 80%; height: 2px;
+    background: var(--cross); opacity: 0.7; border-radius: 2px;
+    top: 50%; left: 50%; transform-origin: center center;
+  }
+  .cal-day.past::before { transform: translate(-50%, -50%) rotate(45deg); }
+  .cal-day.past::after  { transform: translate(-50%, -50%) rotate(-45deg); }
+  .cal-day.exam-day {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; font-weight: 800; border-color: var(--accent);
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+  .cal-day.exam-day::before, .cal-day.exam-day::after { display: none; }
+  @keyframes pulseGlow { 0%,100%{ box-shadow: 0 0 0 0 rgba(226,75,74,.5);} 50%{ box-shadow: 0 0 0 6px rgba(226,75,74,0);} }
 
-    /* QUOTE */
-    .quote { text-align: center; margin-top: 1.5rem; font-size: 13px; color: var(--muted); font-style: italic; line-height: 1.6; }
-  </style>
+  /* BANNER */
+  .banner { display: none; background: var(--accent-bg); border: 1px solid var(--accent-bd); border-radius: 10px; padding: 12px 16px; text-align: center; font-size: 14px; font-weight: 600; color: var(--accent-tx); margin-bottom: 1rem; }
+
+  /* HERO STATES (exam day / post exam) */
+  .hero-card {
+    text-align: center; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 32px 20px; margin-bottom: 1.8rem; box-shadow: var(--shadow);
+    position: relative; overflow: hidden;
+  }
+  .hero-card::before {
+    content:''; position:absolute; inset:0; border-radius:20px; padding:1px;
+    background: linear-gradient(135deg, var(--accent), transparent 40%, var(--accent2));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude; opacity:.6; pointer-events:none;
+  }
+  .hero-emoji { font-size: 44px; margin-bottom: 10px; display:block; }
+  .hero-title { font-family:'Sora',sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+  .hero-sub { font-size: 14px; color: var(--muted); line-height:1.6; max-width: 440px; margin: 0 auto 6px; }
+  .hero-badge {
+    display:inline-block; margin-top: 14px; background: var(--accent-bg); color: var(--accent-tx);
+    border: 1px solid var(--accent-bd); padding: 6px 16px; border-radius: 99px;
+    font-size: 12px; font-weight: 700; letter-spacing: .04em;
+  }
+
+  /* RESULT COUNTDOWN */
+  .result-section { background: var(--surface); border:1px solid var(--border); border-radius: 16px; padding: 18px 20px; margin-bottom: 1.8rem; box-shadow: var(--shadow); }
+  .result-title { font-size: 11px; text-transform: uppercase; letter-spacing:.1em; color: var(--muted); margin-bottom: 12px; }
+  .result-row { display:flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .result-row input[type="date"] {
+    flex: 1; min-width: 150px; background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); border-radius: 8px; padding: 9px 12px; font-size: 13px; font-family: 'Manrope', sans-serif;
+  }
+  .result-row button {
+    background: linear-gradient(135deg, var(--accent), var(--accent2)); color:#fff; border:none;
+    padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight:700; cursor:pointer; font-family:'Manrope',sans-serif;
+  }
+  .result-clock { display:flex; justify-content:center; gap:8px; margin-top: 14px; }
+  .result-clock .cbox { background: var(--surface2); border-radius: 10px; padding: 8px 12px; text-align:center; min-width: 56px; }
+  .result-clock .cbox .v { font-family:'Sora',sans-serif; font-weight:700; font-size: 20px; }
+  .result-clock .cbox .l { font-size: 9px; text-transform: uppercase; color: var(--muted); letter-spacing:.06em; }
+  .result-cleared { text-align:center; font-size: 12px; color: var(--muted); margin-top: 10px; cursor:pointer; text-decoration: underline; }
+
+  /* SHARE */
+  .actions-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 1.6rem; flex-wrap: wrap; }
+  .action-btn {
+    background: var(--surface); border: 1px solid var(--border); color: var(--text);
+    padding: 9px 16px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer;
+    display:flex; align-items:center; gap:6px; transition: transform .15s, border-color .2s; font-family:'Manrope',sans-serif;
+  }
+  .action-btn:hover { transform: translateY(-2px); border-color: var(--accent); }
+
+  /* QUOTE */
+  .quote { text-align: center; margin-top: 1.5rem; font-size: 13px; color: var(--muted); font-style: italic; line-height: 1.6; }
+
+  /* CONFETTI CANVAS */
+  #confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
+
+  .hidden { display: none !important; }
+</style>
 </head>
 <body>
+<canvas id="confettiCanvas"></canvas>
 <div class="container">
 
   <div class="topbar">
@@ -196,37 +272,83 @@
   </div>
 
   <div class="header">
-    <div class="label">Counting down to</div>
+    <div class="label" id="headerLabel">Counting down to</div>
     <h1>Wireless <span>PSI</span></h1>
     <div class="sub">Sunday, August 23, 2026</div>
   </div>
 
-  <div class="clock-row">
-    <div class="clock-unit"><div class="clock-box" id="cDays">00</div><div class="clock-lbl">Days</div></div>
-    <div class="sep">:</div>
-    <div class="clock-unit"><div class="clock-box" id="cHrs">00</div><div class="clock-lbl">Hours</div></div>
-    <div class="sep">:</div>
-    <div class="clock-unit"><div class="clock-box" id="cMin">00</div><div class="clock-lbl">Mins</div></div>
-    <div class="sep">:</div>
-    <div class="clock-unit"><div class="clock-box" id="cSec">00</div><div class="clock-lbl">Secs</div></div>
-  </div>
-
-  <div class="progress-wrap">
-    <div class="progress-meta">
-      <span>Jan 1, 2026</span>
-      <span id="pPct">0% of prep elapsed</span>
-      <span>August 23, 2026</span>
+  <!-- PREP PHASE -->
+  <div id="prepPhase">
+    <div class="clock-row">
+      <div class="clock-unit"><div class="clock-box" id="cDays">00</div><div class="clock-lbl">Days</div></div>
+      <div class="sep">:</div>
+      <div class="clock-unit"><div class="clock-box" id="cHrs">00</div><div class="clock-lbl">Hours</div></div>
+      <div class="sep">:</div>
+      <div class="clock-unit"><div class="clock-box" id="cMin">00</div><div class="clock-lbl">Mins</div></div>
+      <div class="sep">:</div>
+      <div class="clock-unit"><div class="clock-box" id="cSec">00</div><div class="clock-lbl">Secs</div></div>
     </div>
-    <div class="progress-bg"><div class="progress-fill" id="pBar"></div></div>
+
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span>Jan 1, 2026</span>
+        <span id="pPct">0% of prep elapsed</span>
+        <span>August 23, 2026</span>
+      </div>
+      <div class="progress-bg"><div class="progress-fill" id="pBar"></div></div>
+    </div>
+
+    <div class="stats-grid" id="statsGrid"></div>
+    <div class="milestones" id="milestonesRow"></div>
+
+    <div class="streak-card">
+      <div class="streak-info">
+        <div class="streak-num"><span id="streakCount">0</span> 🔥</div>
+        <div class="streak-lbl">Day study streak</div>
+      </div>
+      <button class="streak-btn" id="streakBtn" onclick="markStudied()">Mark today studied</button>
+    </div>
   </div>
 
-  
+  <!-- EXAM DAY HERO -->
+  <div id="examDayPhase" class="hero-card hidden">
+    <span class="hero-emoji">🎯</span>
+    <div class="hero-title">Today is the day!</div>
+    <div class="hero-sub">Every hour you put in led here. Stay calm, trust your prep, and give it everything.</div>
+    <div class="hero-badge" id="examDayBadge">EXAM DAY</div>
+  </div>
 
-  <div class="stats-grid" id="statsGrid"></div>
+  <!-- POST EXAM HERO -->
+  <div id="postExamPhase" class="hero-card hidden">
+    <span class="hero-emoji">🎉</span>
+    <div class="hero-title">Exam completed!</div>
+    <div class="hero-sub">The hard part is done. However it went, you showed up and gave it your shot. Now it's time to breathe.</div>
+    <div class="hero-badge" id="daysSinceBadge">Day 1 since exam</div>
+  </div>
 
-  <div class="milestones" id="milestonesRow"></div>
+  <div id="resultSection" class="result-section hidden">
+    <div class="result-title">Result countdown</div>
+    <div class="result-row" id="resultInputRow">
+      <input type="date" id="resultDateInput" />
+      <button onclick="saveResultDate()">Set date</button>
+    </div>
+    <div id="resultClockWrap" class="hidden">
+      <div class="result-clock">
+        <div class="cbox"><div class="v" id="rDays">00</div><div class="l">Days</div></div>
+        <div class="cbox"><div class="v" id="rHrs">00</div><div class="l">Hrs</div></div>
+        <div class="cbox"><div class="v" id="rMin">00</div><div class="l">Min</div></div>
+        <div class="cbox"><div class="v" id="rSec">00</div><div class="l">Sec</div></div>
+      </div>
+      <div class="result-cleared" onclick="clearResultDate()">Clear result date</div>
+    </div>
+  </div>
 
   <div class="banner" id="banner"></div>
+
+  <div class="actions-row">
+    <button class="action-btn" onclick="shareStatus()">📋 Copy status</button>
+    <button class="action-btn" onclick="toggleCalendar()">🗓️ <span id="calToggleLbl">Show full calendar</span></button>
+  </div>
 
   <!-- CALENDAR -->
   <div class="cal-section">
@@ -239,6 +361,7 @@
 </div>
 <script>
   const EXAM_DATE  = new Date(2026, 7, 23, 23, 59, 59);
+  const EXAM_DAY_START = new Date(2026, 7, 23, 0, 0, 0);
   const PREP_START = new Date(2026, 0, 1);
 
   const DAYS_LONG  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -257,6 +380,14 @@
     "One day or day one — you decide.",
     "Believe you can and you're halfway there.",
   ];
+  const POST_QUOTES = [
+    "You did the work. Now let it pay off.",
+    "Rest is part of the process too.",
+    "Whatever happens next, you showed up.",
+    "Patience now, results soon.",
+    "You can't control the outcome — only the effort you gave. That part is done.",
+    "Trust the prep. Trust yourself.",
+  ];
 
   // ── THEME ───────────────────────────────────────────────
   const saved = localStorage.getItem('psi_theme') || 'dark';
@@ -274,6 +405,11 @@
 
   // ── HELPERS ─────────────────────────────────────────────
   function pad(n) { return String(Math.floor(n)).padStart(2,'0'); }
+  function dateOnly(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+  // Days remaining NOT counting the exam day itself (0 on exam day, negative after)
+  function daysUntilExcl(from, to) {
+    return Math.round((dateOnly(to) - dateOnly(from)) / 86400000);
+  }
   function countDayType(from, to, weekend) {
     let count = 0;
     const d = new Date(from); d.setHours(0,0,0,0);
@@ -284,11 +420,24 @@
   function statCard(val, lbl) {
     return `<div class="stat-card"><div class="stat-val">${val}</div><div class="stat-lbl">${lbl}</div></div>`;
   }
-  function sameDay(a, b) {
-    return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+  function updateDigit(id, val) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.textContent !== val) {
+      el.textContent = val;
+      el.classList.remove('flip'); void el.offsetWidth; el.classList.add('flip');
+    }
   }
 
   // ── CALENDAR ────────────────────────────────────────────
+  let calExpanded = localStorage.getItem('psi_cal_expanded') === '1';
+  function toggleCalendar() {
+    calExpanded = !calExpanded;
+    localStorage.setItem('psi_cal_expanded', calExpanded ? '1':'0');
+    document.getElementById('calToggleLbl').textContent = calExpanded ? 'Show current month only' : 'Show full calendar';
+    buildCalendar();
+  }
+
   function buildCalendar() {
     const container = document.getElementById('calContainer');
     container.innerHTML = '';
@@ -299,15 +448,17 @@
     const examY   = EXAM_DATE.getFullYear();
     const examM   = EXAM_DATE.getMonth();
 
-    // Show months from PREP_START month up to exam month
     const startY = PREP_START.getFullYear();
     const startM = PREP_START.getMonth();
+
+    document.getElementById('calToggleLbl').textContent = calExpanded ? 'Show current month only' : 'Show full calendar';
 
     for (let y = startY, m = startM; y < examY || (y === examY && m <= examM); ) {
       const daysInMonth = new Date(y, m + 1, 0).getDate();
       const firstDow    = new Date(y, m, 1).getDay();
+      const isCurrentMonth = (y === todayY && m === todayM);
+      const isPastMonth = (y < todayY) || (y === todayY && m < todayM);
 
-      // Count crossed & total for badge
       let crossed = 0, total = daysInMonth;
       for (let d = 1; d <= daysInMonth; d++) {
         const isExam = (y === examY && m === examM && d === EXAM_DATE.getDate());
@@ -317,11 +468,11 @@
 
       const monthDiv = document.createElement('div');
       monthDiv.className = 'cal-month';
+      if (!calExpanded && !isCurrentMonth) monthDiv.classList.add('hidden-month');
 
-      const isCurrentMonth = (y === todayY && m === todayM);
       const badge = isCurrentMonth
         ? `<span>${crossed} / ${total} crossed</span>`
-        : (y < todayY || (y === todayY && m < todayM))
+        : isPastMonth
           ? `<span>All ${total} crossed ✓</span>`
           : `<span>${total} days to go</span>`;
 
@@ -332,6 +483,8 @@
           ${Array(firstDow).fill('<div class="cal-day empty"></div>').join('')}
           ${Array.from({length: daysInMonth}, (_,i) => {
             const d = i + 1;
+            const dow = new Date(y, m, d).getDay();
+            const isWeekend = dow === 0 || dow === 6;
             const isExam = (y === examY && m === examM && d === EXAM_DATE.getDate());
             const isToday = (y === todayY && m === todayM && d === todayD);
             const isPast  = (y < todayY) || (y === todayY && m < todayM) || (y === todayY && m === todayM && d < todayD);
@@ -339,89 +492,218 @@
             if (isExam)      cls = 'exam-day';
             else if (isToday) cls = 'today';
             else if (isPast)  cls = 'past';
+            if (isWeekend) cls += ' weekend';
             return `<div class="cal-day ${cls}">${isExam ? '🎯' : d}</div>`;
           }).join('')}
         </div>`;
 
       container.appendChild(monthDiv);
-
       m++;
       if (m > 11) { m = 0; y++; }
     }
   }
 
-  // Quote — daily rotating
-  document.getElementById('quoteEl').textContent =
-    `"${QUOTES[new Date().getDate() % QUOTES.length]}"`;
+  // ── STREAK ──────────────────────────────────────────────
+  function todayKey() { const d = new Date(); return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; }
+  function loadStreak() {
+    const data = JSON.parse(localStorage.getItem('psi_streak') || '{"count":0,"last":null}');
+    document.getElementById('streakCount').textContent = data.count;
+    const btn = document.getElementById('streakBtn');
+    if (data.last === todayKey()) { btn.textContent = "✓ Studied today"; btn.disabled = true; }
+    else { btn.textContent = "Mark today studied"; btn.disabled = false; }
+  }
+  function markStudied() {
+    const data = JSON.parse(localStorage.getItem('psi_streak') || '{"count":0,"last":null}');
+    const now = new Date();
+    const yest = new Date(now); yest.setDate(now.getDate() - 1);
+    const yKey = `${yest.getFullYear()}-${yest.getMonth()}-${yest.getDate()}`;
+    if (data.last === yKey) data.count += 1;
+    else if (data.last !== todayKey()) data.count = 1;
+    data.last = todayKey();
+    localStorage.setItem('psi_streak', JSON.stringify(data));
+    loadStreak();
+    burstConfetti(60);
+  }
+
+  // ── RESULT DATE ─────────────────────────────────────────
+  function loadResultDate() { return localStorage.getItem('psi_result_date'); }
+  function saveResultDate() {
+    const val = document.getElementById('resultDateInput').value;
+    if (!val) return;
+    localStorage.setItem('psi_result_date', val);
+    renderResultSection();
+  }
+  function clearResultDate() {
+    localStorage.removeItem('psi_result_date');
+    renderResultSection();
+  }
+  function renderResultSection() {
+    const rd = loadResultDate();
+    const inputRow = document.getElementById('resultInputRow');
+    const clockWrap = document.getElementById('resultClockWrap');
+    if (rd) { inputRow.classList.add('hidden'); clockWrap.classList.remove('hidden'); }
+    else { inputRow.classList.remove('hidden'); clockWrap.classList.add('hidden'); }
+  }
+
+  // ── SHARE ───────────────────────────────────────────────
+  function shareStatus() {
+    const now = new Date();
+    const daysLeft = daysUntilExcl(now, EXAM_DATE);
+    let text;
+    if (daysLeft > 0) text = `Wireless PSI exam in ${daysLeft} day${daysLeft===1?'':'s'} (Aug 23, 2026). Grinding daily. 🎯`;
+    else if (daysLeft === 0) text = `Wireless PSI exam is today! 🎯`;
+    else text = `Wireless PSI exam is done — ${Math.abs(daysLeft)} day${Math.abs(daysLeft)===1?'':'s'} since. Awaiting results. 🎉`;
+    navigator.clipboard?.writeText(text).then(() => {
+      const b = document.getElementById('banner');
+      b.style.display = 'block'; b.textContent = '📋 Copied to clipboard!';
+      setTimeout(() => { if (b.textContent === '📋 Copied to clipboard!') b.style.display = 'none'; }, 2000);
+    }).catch(() => {});
+  }
+
+  // ── CONFETTI ────────────────────────────────────────────
+  const cvs = document.getElementById('confettiCanvas');
+  const ctx = cvs.getContext('2d');
+  let confettiParticles = [];
+  function resizeCanvas() { cvs.width = window.innerWidth; cvs.height = window.innerHeight; }
+  window.addEventListener('resize', resizeCanvas); resizeCanvas();
+  function burstConfetti(count = 100) {
+    const colors = ['#E24B4A','#ff8a5c','#e8b64a','#3ecf6e','#7c6ff7'];
+    for (let i=0;i<count;i++) {
+      confettiParticles.push({
+        x: Math.random()*cvs.width, y: -20 - Math.random()*100,
+        vx: (Math.random()-0.5)*4, vy: 2+Math.random()*3,
+        size: 4+Math.random()*5, color: colors[Math.floor(Math.random()*colors.length)],
+        rot: Math.random()*360, vr: (Math.random()-0.5)*10, life: 0
+      });
+    }
+    if (!confettiRunning) { confettiRunning = true; animateConfetti(); }
+  }
+  let confettiRunning = false;
+  function animateConfetti() {
+    ctx.clearRect(0,0,cvs.width,cvs.height);
+    confettiParticles.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life++;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle = p.color; ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size);
+      ctx.restore();
+    });
+    confettiParticles = confettiParticles.filter(p => p.y < cvs.height+30 && p.life < 400);
+    if (confettiParticles.length) requestAnimationFrame(animateConfetti);
+    else { confettiRunning = false; ctx.clearRect(0,0,cvs.width,cvs.height); }
+  }
+
+  // Quote — daily rotating, phase aware
+  function setQuote(phase) {
+    const pool = phase === 'post' ? POST_QUOTES : QUOTES;
+    document.getElementById('quoteEl').textContent = `"${pool[new Date().getDate() % pool.length]}"`;
+  }
 
   // ── TICK ────────────────────────────────────────────────
   let lastCalDay = -1;
+  let lastPhase = null;
 
   function tick() {
     const now = new Date();
 
-    // Date pill
     document.getElementById('dayName').textContent  = DAYS_LONG[now.getDay()];
     document.getElementById('dateFull').textContent = `${MONTHS[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
     let h = now.getHours(), mi = now.getMinutes(), s = now.getSeconds();
     const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
     document.getElementById('timeLive').textContent = `${pad(h)}:${pad(mi)}:${pad(s)} ${ap}`;
 
-    const diff = EXAM_DATE - now;
-    if (diff <= 0) {
-      ['cDays','cHrs','cMin','cSec'].forEach(id => document.getElementById(id).textContent = '00');
-      document.getElementById('pBar').style.width = '100%';
-      document.getElementById('pPct').textContent = '100% — Exam Day!';
-      const b = document.getElementById('banner'); b.style.display = 'block';
-      b.textContent = "🎯 It's exam day! You've prepared hard — go show what you know!";
-      return;
+    const daysLeft = daysUntilExcl(now, EXAM_DATE); // excludes exam day itself
+    let phase;
+    if (now >= EXAM_DAY_START && now <= EXAM_DATE) phase = 'exam-day';
+    else if (now > EXAM_DATE) phase = 'post';
+    else phase = 'prep';
+
+    document.getElementById('prepPhase').classList.toggle('hidden', phase !== 'prep');
+    document.getElementById('examDayPhase').classList.toggle('hidden', phase !== 'exam-day');
+    document.getElementById('postExamPhase').classList.toggle('hidden', phase !== 'post');
+    document.getElementById('resultSection').classList.toggle('hidden', phase !== 'post');
+    document.getElementById('headerLabel').textContent = phase === 'post' ? 'Awaiting result for' : 'Counting down to';
+
+    if (phase !== lastPhase) {
+      setQuote(phase === 'post' ? 'post' : 'prep');
+      if ((phase === 'exam-day' || phase === 'post') && lastPhase !== null) burstConfetti(140);
+      if (phase === 'exam-day' && lastPhase === null) burstConfetti(140);
+      lastPhase = phase;
     }
 
-    const totalSec = Math.floor(diff / 1000);
-    document.getElementById('cSec').textContent  = pad(totalSec % 60);
-    document.getElementById('cMin').textContent  = pad(Math.floor(totalSec/60)%60);
-    document.getElementById('cHrs').textContent  = pad(Math.floor(totalSec/3600)%24);
-    document.getElementById('cDays').textContent = pad(Math.floor(totalSec/86400));
+    if (phase === 'prep') {
+      const totalSec = Math.floor((EXAM_DATE - now) / 1000);
+      updateDigit('cSec', pad(totalSec % 60));
+      updateDigit('cMin', pad(Math.floor(totalSec/60)%60));
+      updateDigit('cHrs', pad(Math.floor(totalSec/3600)%24));
+      updateDigit('cDays', pad(daysLeft));
 
-    const pct = Math.min(100, Math.max(0, Math.round((now - PREP_START) / (EXAM_DATE - PREP_START) * 100)));
-    document.getElementById('pBar').style.width = pct + '%';
-    document.getElementById('pPct').textContent = pct + '% of prep elapsed';
+      const pct = Math.min(100, Math.max(0, Math.round((now - PREP_START) / (EXAM_DATE - PREP_START) * 100)));
+      document.getElementById('pBar').style.width = pct + '%';
+      document.getElementById('pPct').textContent = pct + '% of prep elapsed';
 
-    const daysLeft  = Math.ceil(diff / 86400000);
-    const weeksLeft = (daysLeft / 7).toFixed(1);
-    const totalHrs  = Math.floor(diff / 3600000);
-    const wds = countDayType(now, EXAM_DATE, false);
-    const wes = countDayType(now, EXAM_DATE, true);
-    const hpd = daysLeft > 0 ? Math.ceil(480 / daysLeft) : 0;
+      const weeksLeft = (daysLeft / 7).toFixed(1);
+      const totalHrs  = Math.floor((EXAM_DATE - now) / 3600000);
+      const wds = countDayType(now, EXAM_DAY_START, false);
+      const wes = countDayType(now, EXAM_DAY_START, true);
+      const hpd = daysLeft > 0 ? Math.ceil(480 / daysLeft) : 0;
 
-    document.getElementById('statsGrid').innerHTML =
-      statCard(daysLeft, 'Days left') + statCard(weeksLeft, 'Weeks left') +
-      statCard(totalHrs.toLocaleString(), 'Total hours') +
-      statCard(wds, 'Weekdays left') + statCard(wes, 'Weekends left') +
-      statCard(hpd + 'h', 'Study hrs/day');
+      document.getElementById('statsGrid').innerHTML =
+        statCard(daysLeft, 'Days left') + statCard(weeksLeft, 'Weeks left') +
+        statCard(totalHrs.toLocaleString(), 'Total hours') +
+        statCard(wds, 'Weekdays left') + statCard(wes, 'Weekends left') +
+        statCard(hpd + 'h', 'Study hrs/day');
 
-    const milestones = [
-      { label: '75% prep done', reached: pct >= 75 },
-      { label: '50% mark',      reached: pct >= 50 },
-      { label: 'Last month',    reached: daysLeft <= 30 },
-      { label: 'Last 2 weeks',  reached: daysLeft <= 14 },
-      { label: 'Last week',     reached: daysLeft <= 7 },
-    ];
-    document.getElementById('milestonesRow').innerHTML = milestones.map(m =>
-      `<div class="milestone"><div class="m-lbl">${m.label}</div>
-       <div class="m-val ${m.reached?'reached':''}">${m.reached?'✓ Reached':'Not yet'}</div></div>`
-    ).join('');
+      const milestones = [
+        { label: '75% prep done', reached: pct >= 75 },
+        { label: '50% mark',      reached: pct >= 50 },
+        { label: 'Last month',    reached: daysLeft <= 30 },
+        { label: 'Last 2 weeks',  reached: daysLeft <= 14 },
+        { label: 'Last week',     reached: daysLeft <= 7 },
+      ];
+      document.getElementById('milestonesRow').innerHTML = milestones.map(m =>
+        `<div class="milestone ${m.reached?'done':''}"><div class="m-lbl">${m.label}</div>
+         <div class="m-val ${m.reached?'reached':''}">${m.reached?'✓ Reached':'Not yet'}</div></div>`
+      ).join('');
 
-    const banner = document.getElementById('banner');
-    if (daysLeft <= 7) { banner.style.display='block'; banner.textContent=`🔥 Only ${daysLeft} day${daysLeft===1?'':'s'} left — maximum focus mode!`; }
+      const banner = document.getElementById('banner');
+      if (daysLeft <= 7 && daysLeft > 0) { banner.style.display='block'; banner.textContent=`🔥 Only ${daysLeft} day${daysLeft===1?'':'s'} left — maximum focus mode!`; }
+      else if (daysLeft > 7) { banner.style.display = 'none'; }
 
-    // Rebuild calendar only when day changes (midnight crossover)
+    } else if (phase === 'exam-day') {
+      document.getElementById('examDayBadge').textContent = 'EXAM DAY — GOOD LUCK';
+      document.getElementById('banner').style.display = 'none';
+
+    } else if (phase === 'post') {
+      const daysSince = Math.abs(daysLeft) ; // days since exam day (exam day itself = day 0)
+      document.getElementById('daysSinceBadge').textContent =
+        daysSince === 0 ? 'Exam finished today' : `${daysSince} day${daysSince===1?'':'s'} since the exam`;
+      document.getElementById('banner').style.display = 'none';
+
+      renderResultSection();
+      const rd = loadResultDate();
+      if (rd) {
+        const target = new Date(rd + 'T18:00:00');
+        const rdiff = target - now;
+        if (rdiff > 0) {
+          const rTotalSec = Math.floor(rdiff/1000);
+          updateDigit('rDays', pad(Math.floor(rTotalSec/86400)));
+          updateDigit('rHrs', pad(Math.floor(rTotalSec/3600)%24));
+          updateDigit('rMin', pad(Math.floor(rTotalSec/60)%60));
+          updateDigit('rSec', pad(rTotalSec%60));
+        } else {
+          updateDigit('rDays','00'); updateDigit('rHrs','00'); updateDigit('rMin','00'); updateDigit('rSec','00');
+        }
+      }
+    }
+
     if (now.getDate() !== lastCalDay) {
       lastCalDay = now.getDate();
       buildCalendar();
     }
   }
 
+  loadStreak();
+  buildCalendar();
   tick();
   setInterval(tick, 1000);
 </script>
